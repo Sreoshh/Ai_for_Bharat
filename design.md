@@ -10,57 +10,7 @@ The architecture prioritizes low latency for emergency requests, high availabili
 
 The system follows a microservices architecture with the following key components:
 
-```mermaid
-graph TB
-    subgraph "Client Layer"
-        MA[Mobile App]
-        CD[Coordinator Dashboard]
-    end
-    
-    subgraph "API Gateway"
-        AG[API Gateway]
-    end
-    
-    subgraph "Core Services"
-        ERS[Emergency Request Service]
-        ADS[AI Decision Service]
-        LS[Location Service]
-        ETA[ETA Calculator]
-        NS[Notification Service]
-    end
-    
-    subgraph "External Integrations"
-        MS[Mapping Service]
-        HS[Hospital Systems]
-        AP[Ambulance Providers]
-    end
-    
-    subgraph "Data Layer"
-        RDB[(PostgreSQL)]
-        CACHE[(Redis Cache)]
-        TS[(Time Series DB)]
-    end
-    
-    MA --> AG
-    CD --> AG
-    AG --> ERS
-    AG --> ADS
-    AG --> LS
-    AG --> ETA
-    
-    ERS --> NS
-    ADS --> LS
-    ADS --> ETA
-    LS --> TS
-    ETA --> MS
-    
-    ERS --> RDB
-    ADS --> RDB
-    LS --> CACHE
-    
-    ERS --> HS
-    ERS --> AP
-```
+![Current Panel](assets/png_01)
 
 The architecture ensures:
 - **Scalability**: Microservices can be scaled independently based on load
