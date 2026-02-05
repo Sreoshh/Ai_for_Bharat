@@ -10,7 +10,7 @@ The architecture prioritizes low latency for emergency requests, high availabili
 
 The system follows a microservices architecture with the following key components:
 
-![Current Panel](assets/png_01)
+![Current Panel](./png_01.png)
 
 The architecture ensures:
 - **Scalability**: Microservices can be scaled independently based on load
