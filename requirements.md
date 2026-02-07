@@ -1,144 +1,181 @@
 # Requirements Document
 
-# AI-Powered Emergency Ambulance Dispatch System
+## AI-Powered Emergency Ambulance Dispatch System  
 **AI for Bharat Hackathon**  
-Track: AI for Healthcare & Life Sciences
+**Track:** AI for Healthcare & Life Sciences  
+
+---
 
 ## Introduction
 
-The AI-powered emergency ambulance dispatch application addresses critical delays in emergency medical response by providing intelligent ambulance allocation and real-time coordination. The system connects users to the nearest available ambulances using AI-based selection algorithms that consider location, traffic conditions, and hospital readiness to optimize emergency response times.
+The AI-powered emergency ambulance dispatch system addresses critical delays in emergency medical response by enabling intelligent ambulance allocation and real-time coordination. The solution allows users to request ambulances with a single action and uses AI-driven decision logic to identify the most suitable ambulance based on location, traffic conditions, ambulance readiness, and historical performance. The system is designed to operate reliably on cloud infrastructure and remain functional in low-connectivity scenarios.
+
+---
 
 ## Glossary
 
-- **Emergency_Request_System**: The core system that processes and manages emergency ambulance requests
-- **AI_Decision_Engine**: The intelligent component that ranks and selects optimal ambulances based on multiple criteria
-- **Location_Service**: The component that tracks and manages real-time location data for ambulances and users
-- **Ambulance_Provider**: Organizations or individuals that operate ambulances and are registered in the system
-- **Emergency_Coordinator**: Personnel who monitor and manage emergency responses through the system
-- **Hospital_System**: Healthcare facilities that receive patients and provide availability status
-- **User**: General public who may need emergency ambulance services
-- **ETA_Calculator**: Component that predicts and updates estimated time of arrival
+- **Emergency_Request_System:** Cloud-based backend responsible for processing and managing emergency ambulance requests  
+- **AI_Decision_Engine:** Intelligent decision component that ranks and selects optimal ambulances using heuristic scoring and optional regression models  
+- **Location_Service:** Service responsible for real-time GPS tracking and location updates  
+- **Ambulance_Provider:** Organizations or individuals operating ambulances registered in the system  
+- **Emergency_Coordinator:** Authorized personnel monitoring and managing emergency responses through a dashboard  
+- **Hospital_System:** External hospital systems providing emergency department availability  
+- **User:** Members of the public requesting emergency ambulance services  
+- **ETA_Calculator:** Component responsible for estimating and updating ambulance arrival times  
+
+---
 
 ## Requirements
 
+---
+
 ### Requirement 1: Emergency Request Processing
 
-**User Story:** As a user in a medical emergency, I want to request an ambulance with one click, so that I can get immediate help without complex procedures.
+**User Story:**  
+As a user in a medical emergency, I want to request an ambulance with one click so that I can receive immediate assistance without complex procedures.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN a user taps the emergency button, THE Emergency_Request_System SHALL capture the user's GPS location within 5 seconds
-2. WHEN a user submits an emergency request, THE Emergency_Request_System SHALL validate the request and create a unique emergency ID
-3. WHEN GPS is unavailable, THE Emergency_Request_System SHALL prompt the user to manually enter their location
-4. WHEN an emergency request is created, THE Emergency_Request_System SHALL immediately notify all relevant ambulance providers within a 10km radius
-5. WHEN network connectivity is poor, THE Emergency_Request_System SHALL queue the request and retry transmission every 30 seconds
+- WHEN a user taps the emergency button, THE Emergency_Request_System SHALL capture the user’s GPS location within 5 seconds  
+- WHEN a user submits an emergency request, THE Emergency_Request_System SHALL validate the request and generate a unique emergency request ID  
+- WHEN GPS data is unavailable, THE Emergency_Request_System SHALL allow manual location input  
+- WHEN an emergency request is created, THE Emergency_Request_System SHALL notify nearby ambulance providers within a 10 km radius  
+- WHEN network connectivity is unstable, THE Emergency_Request_System SHALL queue the request locally and retry transmission every 30 seconds  
+
+---
 
 ### Requirement 2: AI-Based Ambulance Selection
 
-**User Story:** As an emergency coordinator, I want the system to intelligently select the best ambulance for each request, so that response times are minimized and resources are optimally allocated.
+**User Story:**  
+As an emergency coordinator, I want the system to intelligently select the most suitable ambulance so that response time is minimized and resources are optimally utilized.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN multiple ambulances are available, THE AI_Decision_Engine SHALL rank them based on distance, traffic conditions, and ambulance capabilities
-2. WHEN calculating ambulance rankings, THE AI_Decision_Engine SHALL consider real-time traffic data and predicted travel time
-3. WHEN an ambulance is selected, THE AI_Decision_Engine SHALL verify the ambulance's availability status before assignment
-4. WHEN no ambulances are available within 10km, THE AI_Decision_Engine SHALL expand the search radius to 25km and re-evaluate
-5. WHEN ambulance capabilities are required (e.g., cardiac equipment), THE AI_Decision_Engine SHALL filter ambulances by required equipment
-6. WHEN historical response data is available, THE AI_Decision_Engine MAY use a lightweight regression model to predict expected arrival times and improve ambulance ranking accuracy
+- WHEN multiple ambulances are available, THE AI_Decision_Engine SHALL rank them using distance, traffic conditions, and equipment capabilities  
+- WHEN calculating rankings, THE AI_Decision_Engine SHALL incorporate real-time traffic data from mapping services  
+- WHEN an ambulance is selected, THE AI_Decision_Engine SHALL verify its availability before assignment  
+- WHEN no ambulances are available within 10 km, THE AI_Decision_Engine SHALL expand the search radius to 25 km  
+- WHEN specific medical equipment is required, THE AI_Decision_Engine SHALL filter ambulances accordingly  
+- WHEN sufficient historical response data exists, THE AI_Decision_Engine MAY use a lightweight regression model to improve ETA prediction and ranking accuracy  
+
+---
 
 ### Requirement 3: Real-Time Location Tracking
 
-**User Story:** As a user waiting for an ambulance, I want to see the ambulance's real-time location and estimated arrival time, so that I can prepare and know when help will arrive.
+**User Story:**  
+As a user waiting for an ambulance, I want to view the ambulance’s real-time location and estimated arrival time so that I know when help will arrive.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN an ambulance is dispatched, THE Location_Service SHALL track its GPS position and update every 10 seconds
-2. WHEN displaying ambulance location, THE Location_Service SHALL show the ambulance's position on a map with accuracy within 50 meters
-3. WHEN the ambulance location changes, THE Location_Service SHALL update the user's display within 15 seconds
-4. WHEN GPS signal is lost, THE Location_Service SHALL use the last known position and indicate signal loss to the user
-5. WHEN the ambulance arrives within 100 meters of the user, THE Location_Service SHALL send an arrival notification
+- WHEN an ambulance is dispatched, THE Location_Service SHALL receive GPS updates at intervals of up to 10 seconds  
+- WHEN displaying location data, THE Location_Service SHALL show the ambulance position on an interactive map with accuracy within 50 meters  
+- WHEN location updates occur, THE user interface SHALL reflect the change within 15 seconds  
+- WHEN GPS signal is temporarily lost, THE system SHALL display the last known location and indicate reduced accuracy  
+- WHEN the ambulance is within 100 meters of the user, THE system SHALL trigger an arrival notification  
+
+---
 
 ### Requirement 4: ETA Prediction and Updates
 
-**User Story:** As a user, I want accurate estimated arrival times that update in real-time, so that I can make informed decisions and prepare appropriately.
+**User Story:**  
+As a user, I want accurate and continuously updated ETAs so that I can make informed decisions while waiting.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN an ambulance is dispatched, THE ETA_Calculator SHALL provide an initial estimated arrival time based on current traffic conditions
-2. WHEN traffic conditions change, THE ETA_Calculator SHALL recalculate and update the ETA within 2 minutes
-3. WHEN the ambulance deviates from the planned route, THE ETA_Calculator SHALL adjust the estimate based on the new route
-4. WHEN ETA changes by more than 5 minutes, THE ETA_Calculator SHALL notify the user of the updated time
-5. WHEN the ambulance is within 5 minutes of arrival, THE ETA_Calculator SHALL provide minute-by-minute updates
-6. WHEN sufficient historical data exists, THE ETA_Calculator MAY use a regression-based prediction model to improve accuracy
+- WHEN an ambulance is dispatched, THE ETA_Calculator SHALL compute an initial ETA using current traffic conditions  
+- WHEN traffic conditions change significantly, THE ETA_Calculator SHALL update the ETA within 2 minutes  
+- WHEN route deviation is detected, THE ETA_Calculator SHALL recalculate the ETA accordingly  
+- WHEN ETA changes by more than 5 minutes, THE system SHALL notify the user  
+- WHEN the ambulance is within 5 minutes of arrival, THE system SHALL provide minute-by-minute ETA updates  
+- WHEN historical data is sufficient, THE ETA_Calculator MAY use regression-based prediction to improve accuracy  
+
+---
 
 ### Requirement 5: Hospital Integration and Availability
 
-**User Story:** As an ambulance provider, I want to know which hospitals have available capacity, so that I can transport patients to facilities that can immediately provide care.
+**User Story:**  
+As an ambulance provider, I want visibility into hospital availability so that patients can be transported to facilities capable of immediate care.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN selecting a destination hospital, THE Hospital_System SHALL provide real-time availability status for emergency departments
-2. WHEN a hospital reaches capacity, THE Hospital_System SHALL update its status to unavailable within 5 minutes
-3. WHEN transporting a patient, THE Hospital_System SHALL reserve a bed and notify the receiving hospital of the incoming patient
-4. WHEN multiple hospitals are available, THE Hospital_System SHALL recommend the closest hospital with appropriate specialization
-5. WHEN a hospital becomes available again, THE Hospital_System SHALL update its status and notify relevant ambulance providers
+- WHEN selecting a destination hospital, THE Hospital_System SHALL provide real-time emergency capacity information  
+- WHEN a hospital reaches capacity, THE Hospital_System SHALL update its status within 5 minutes  
+- WHEN transporting a patient, THE system SHALL support reservation of emergency beds  
+- WHEN multiple hospitals are available, THE system SHALL recommend the nearest suitable hospital based on specialization  
+- WHEN hospital availability changes, THE system SHALL notify relevant ambulance providers  
+
+---
 
 ### Requirement 6: Ambulance Provider Management
 
-**User Story:** As an ambulance provider, I want to manage my fleet's availability and status, so that the system can accurately dispatch my ambulances and track their utilization.
+**User Story:**  
+As an ambulance provider, I want to manage fleet availability so that dispatch decisions remain accurate.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN an ambulance goes on duty, THE Emergency_Request_System SHALL mark it as available for dispatch
-2. WHEN an ambulance is assigned to an emergency, THE Emergency_Request_System SHALL update its status to "en route" and make it unavailable for new assignments
-3. WHEN an ambulance completes a transport, THE Emergency_Request_System SHALL allow the crew to update their status to available or off-duty
-4. WHEN an ambulance has equipment issues, THE Emergency_Request_System SHALL allow providers to mark specific capabilities as unavailable
-5. WHEN an ambulance provider updates fleet information, THE Emergency_Request_System SHALL validate and store the updated data within 30 seconds
+- WHEN an ambulance goes on duty, THE system SHALL mark it as available  
+- WHEN an ambulance is assigned, THE system SHALL update its status to “en route”  
+- WHEN transport is completed, THE system SHALL allow status updates to available or off-duty  
+- WHEN equipment is unavailable, THE provider SHALL be able to update capability metadata  
+- WHEN provider data is updated, THE system SHALL persist changes within 30 seconds  
+
+---
 
 ### Requirement 7: Data Privacy and Security
 
-**User Story:** As a user, I want my personal and medical information to be secure and private, so that I can trust the system with sensitive emergency data.
+**User Story:**  
+As a user, I want my personal and location data to be secure so that I can trust the system.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN collecting user location data, THE Emergency_Request_System SHALL encrypt all location information using AES-256 encryption
-2. WHEN storing emergency request data, THE Emergency_Request_System SHALL comply with healthcare data privacy regulations (HIPAA equivalent)
-3. WHEN sharing data with ambulance providers, THE Emergency_Request_System SHALL only provide necessary information for the emergency response
-4. WHEN a user requests data deletion, THE Emergency_Request_System SHALL remove all personal data within 30 days while preserving anonymized analytics
-5. WHEN authenticating users, THE Emergency_Request_System SHALL use secure authentication methods and expire sessions after 24 hours of inactivity
+- WHEN collecting location data, THE system SHALL encrypt data in transit and at rest  
+- WHEN storing emergency data, THE system SHALL comply with healthcare data privacy best practices  
+- WHEN sharing data externally, THE system SHALL expose only the minimum necessary information  
+- WHEN a user requests data deletion, THE system SHALL remove personal data within 30 days while retaining anonymized analytics  
+- WHEN authenticating users or coordinators, THE system SHALL use secure authentication mechanisms  
+
+---
 
 ### Requirement 8: Offline and Low-Connectivity Support
 
-**User Story:** As a user in an area with poor network coverage, I want the app to still function for emergency requests, so that connectivity issues don't prevent me from getting help.
+**User Story:**  
+As a user in low-network areas, I want the application to continue functioning for emergency requests.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN network connectivity is unavailable, THE Emergency_Request_System SHALL store the emergency request locally and attempt to send when connectivity is restored
-2. WHEN operating in offline mode, THE Emergency_Request_System SHALL use cached ambulance location data from the last successful update
-3. WHEN connectivity is restored after offline operation, THE Emergency_Request_System SHALL synchronize all pending requests and status updates within 60 seconds
-4. WHEN network speed is slow, THE Emergency_Request_System SHALL prioritize critical data transmission over non-essential features
-5. WHEN GPS is available but internet is not, THE Emergency_Request_System SHALL continue tracking location and queue updates for later transmission
+- WHEN internet connectivity is unavailable, THE application SHALL store requests locally and retry automatically  
+- WHEN operating offline, THE application SHALL use cached location and ambulance data  
+- WHEN connectivity is restored, THE system SHALL synchronize pending requests within 60 seconds  
+- WHEN bandwidth is limited, THE system SHALL prioritize emergency request data over non-critical updates  
+
+---
 
 ### Requirement 9: Emergency Coordinator Dashboard
 
-**User Story:** As an emergency coordinator, I want a comprehensive dashboard to monitor all active emergencies and system status, so that I can oversee operations and intervene when necessary.
+**User Story:**  
+As an emergency coordinator, I want a dashboard to monitor and manage all active emergencies.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN viewing the dashboard, THE Emergency_Request_System SHALL display all active emergency requests with their current status and assigned ambulances
-2. WHEN an emergency request exceeds expected response time, THE Emergency_Request_System SHALL highlight it as requiring attention
-3. WHEN system performance degrades, THE Emergency_Request_System SHALL display alerts about affected services or regions
-4. WHEN an ambulance reports an issue, THE Emergency_Request_System SHALL allow coordinators to reassign the emergency to another ambulance
-5. WHEN generating reports, THE Emergency_Request_System SHALL provide analytics on response times, success rates, and system utilization
+- WHEN accessing the dashboard, THE system SHALL display all active requests and assignments  
+- WHEN response times exceed thresholds, THE system SHALL flag the request  
+- WHEN service degradation occurs, THE system SHALL display operational alerts  
+- WHEN an ambulance becomes unavailable, THE coordinator SHALL be able to reassign the request  
+- WHEN generating reports, THE system SHALL provide response time and utilization analytics  
+
+---
 
 ### Requirement 10: Integration with Third-Party Services
 
-**User Story:** As a system administrator, I want the application to integrate seamlessly with mapping services and traffic data providers, so that location and routing information is accurate and up-to-date.
+**User Story:**  
+As a system administrator, I want seamless integration with mapping, traffic, and notification services.
 
-#### Acceptance Criteria
+**Acceptance Criteria**
 
-1. WHEN calculating routes, THE Emergency_Request_System SHALL integrate with mapping services to provide optimal paths considering current traffic
-2. WHEN mapping services are unavailable, THE Emergency_Request_System SHALL fall back to cached route data and notify users of potential inaccuracies
-3. WHEN receiving traffic updates, THE Emergency_Request_System SHALL incorporate new data into route calculations within 2 minutes
-4. WHEN integrating with hospital systems, THE Emergency_Request_System SHALL use standardized healthcare data formats (HL7 FHIR)
-5. WHEN third-party services experience outages, THE Emergency_Request_System SHALL continue operating with reduced functionality and log all service disruptions
+- WHEN calculating routes, THE system SHALL integrate with Google Maps APIs for routing and traffic data  
+- WHEN mapping services are unavailable, THE system SHALL fall back to cached route data  
+- WHEN traffic updates are received, THE system SHALL update routing calculations within 2 minutes  
+- WHEN integrating with hospital systems, THE system SHALL support standardized healthcare data formats where available  
+- WHEN third-party services experience outages, THE system SHALL continue operating with reduced functionality and log disruptions  
+
+---
