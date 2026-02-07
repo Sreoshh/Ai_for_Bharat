@@ -8,20 +8,22 @@ The architecture prioritizes low latency for emergency requests, high availabili
 
 ## Architecture
 
-The system follows a microservices architecture with the following key components:
-
+The system follows a cloud-native, microservices-inspired architecture deployed using AWS managed services.
 ![Current Panel](./png_01.png)
 
 The architecture ensures:
-- **Scalability**: Microservices can be scaled independently based on load
-- **Reliability**: Service redundancy and circuit breakers prevent cascading failures
-- **Performance**: Caching and optimized data structures minimize response times
-- **Security**: API gateway handles authentication and rate limiting
+- **Scalability**: AWS Lambda–based services scale automatically based on incoming request load  
+- **Reliability**: Retry logic, circuit breakers, and managed cloud infrastructure prevent cascading failures  
+- **Performance**: Redis-based caching and optimized queries minimize response times  
+- **Security**: AWS API Gateway handles authentication, authorization, and rate limiting  
 
 ## Components and Interfaces
 
 ### Emergency Request Service
 **Responsibility**: Manages the lifecycle of emergency requests from creation to completion.
+
+**Implementation**  
+Implemented as AWS Lambda functions exposed via AWS API Gateway.
 
 **Key Interfaces**:
 - `POST /emergency/request` - Creates new emergency request
